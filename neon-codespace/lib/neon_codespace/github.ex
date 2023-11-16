@@ -34,6 +34,16 @@ defmodule NeonCodespace.Github do
   end
 
   def find_codespace(existing_branch) do
+    resp =
+      Req.get!("https://api.github.com/repos/#{owner()}/#{repo()}/codespaces",
+        auth: {:bearer, token()}
+      )
+
+    codespace =
+      resp.body["codespaces"]
+      |> Enum.find(fn %{"git_status" => %{"ref" => name}} -> name == existing_branch["name"] end)
+
+    codespace["web_url"]
   end
 
   def create_codespace(branch_name, lsn, sha) do
