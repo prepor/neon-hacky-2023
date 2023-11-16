@@ -3,18 +3,21 @@ import Config
 # Configure your database
 
 config :neon_todo, NeonTodo.Repo,
-  username: "prepor",
-  password: "sJF9ExoX1ngc",
-  hostname: "ep-twilight-shadow-20509635.localtest.me",
-  port: 4432,
+  username: System.get_env("DB_USER"),
+  password: System.get_env("DB_PASS"),
+  hostname: System.get_env("DB_HOST"),
+  port: System.get_env("DB_PORT"),
   database: "neondb",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10,
   ssl: true,
   ssl_opts: [
-    server_name_indication: ~c"ep-twilight-shadow-20509635.localtest.me",
+    server_name_indication: to_charlist(System.get_env("DB_HOST")),
     verify: :verify_none
+  ],
+  parameters: [
+    options: System.get_env("DB_OPTIONS")
   ]
 
 # config :neon_todo, NeonTodo.Repo,
@@ -45,7 +48,7 @@ config :neon_todo, NeonTodo.Repo,
 config :neon_todo, NeonTodoWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
-  http: [ip: {127, 0, 0, 1}, port: 4000],
+  http: [ip: {0, 0, 0, 0}, port: 4000],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,

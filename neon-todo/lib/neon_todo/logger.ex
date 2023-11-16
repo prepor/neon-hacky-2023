@@ -135,6 +135,8 @@ defmodule NeonTodo.LoggerBackend do
 
     {:ok, %{rows: [[lsn]]}} = NeonTodo.Repo.query("select pg_current_wal_lsn()::text as lsn", [])
 
+    debug_url = "http://localhost:4001/api/debug?lsn=#{lsn}&sha=#{System.get_env("GIT_SHA")}"
+
     case meta[:crash_reason] do
       # If the crash reason is an exception, we want to report the exception itself
       # for better event reporting.
@@ -142,7 +144,7 @@ defmodule NeonTodo.LoggerBackend do
         Sentry.capture_exception(
           exception,
           opts
-          |> Keyword.update!(:extra, &Map.put(&1, :lsn, lsn))
+          |> Keyword.update!(:extra, &Map.put(&1, :debug_url, debug_url))
           |> Keyword.put(:stacktrace, stacktrace)
         )
 
@@ -153,7 +155,7 @@ defmodule NeonTodo.LoggerBackend do
         opts =
           opts
           |> Keyword.put(:stacktrace, stacktrace)
-          |> Keyword.update!(:extra, &Map.put(&1, :lsn, lsn))
+          |> Keyword.update!(:extra, &Map.put(&1, :debug_url, debug_url))
           |> Keyword.update!(:extra, &Map.put(&1, :crash_reason, inspect(other)))
 
         case msg_to_binary(msg) do

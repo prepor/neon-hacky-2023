@@ -21,9 +21,11 @@ defmodule NeonCodespaceWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", NeonCodespaceWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", NeonCodespaceWeb do
+    pipe_through :api
+
+    get "/debug", DebugController, :index
+  end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:neon_codespace, :dev_routes) do
