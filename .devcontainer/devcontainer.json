@@ -1,0 +1,1 @@
+{"features":{"ghcr.io/tailscale/codespace/tailscale":{}},"containerEnv":{"DB_HOST":"br-proud-hat-02078390.prepor.dev","DB_OPTIONS":"neon_lsn:0/1EB5A48 neon_endpoint_type:read_write","DB_PASS":"fgE6dajX8Hwm","DB_PORT":"4433","DB_USER":"prepor","NEON_LSN":"0/1EB5A48"},"runArgs":["--device=/dev/net/tun"]}
